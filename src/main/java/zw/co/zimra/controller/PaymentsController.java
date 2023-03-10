@@ -2,9 +2,7 @@ package zw.co.zimra.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zw.co.zimra.pojo.ProcessPayment;
 import zw.co.zimra.pojo.ProcessPaymentResponse;
 import zw.co.zimra.pojo.ValidateAssessment;
@@ -23,12 +21,18 @@ public class PaymentsController {
     PaymentProcessor processor;
 
     @GetMapping("/validateAssessment")
-    public ValidateAssessmentResponse validate (ValidateAssessment validateAssessment){
+    public ValidateAssessmentResponse validate (@RequestParam String assNo,@RequestParam String office,@RequestParam String year){
+
+        ValidateAssessment validateAssessment = new ValidateAssessment();
+        validateAssessment.setAssNo(assNo);
+        validateAssessment.setOffice(office);
+        validateAssessment.setYear(year);
+
         return assessment.checkIfAssessmentExists(validateAssessment);
     }
 
     @PostMapping("/paymentAdvice")
-    public ProcessPaymentResponse process (ProcessPayment processPayment){
+    public ProcessPaymentResponse process ( @RequestBody ProcessPayment processPayment){
         return processor.paymentProcessFlow(processPayment);
     }
 

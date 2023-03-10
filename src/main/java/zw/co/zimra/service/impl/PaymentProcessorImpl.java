@@ -23,6 +23,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         ppr.setCaptureTime(processPayment.getCaptureTime());
         ppr.setCurrency(processPayment.getCurrency());
         ppr.setAmount(processPayment.getAmount());
+        ppr.setClientName(processPayment.getClientName());
         //hard coding value
         ppr.setReceiptNumber("ZIMRA0000011111122222");
         ppr.setCustomsReceiptDate(" Customs reciept date");
