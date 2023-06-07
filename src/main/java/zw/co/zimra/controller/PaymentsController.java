@@ -1,24 +1,26 @@
 package zw.co.zimra.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import zw.co.zimra.model.Payment;
 import zw.co.zimra.pojo.ProcessPayment;
-import zw.co.zimra.pojo.ProcessPaymentResponse;
 import zw.co.zimra.pojo.ValidateAssessment;
 import zw.co.zimra.pojo.ValidateAssessmentResponse;
-import zw.co.zimra.service.Assessment;
-import zw.co.zimra.service.PaymentProcessor;
+import zw.co.zimra.service.AssessmentService;
+import zw.co.zimra.service.PaymentProcessorService;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentsController {
 
     @Autowired
-     Assessment assessment;
+    AssessmentService assessment;
 
     @Autowired
-    PaymentProcessor processor;
+    PaymentProcessorService processor;
 
     @GetMapping("/validateAssessment")
     public ValidateAssessmentResponse validate (@RequestParam String assNo,@RequestParam String office,@RequestParam String year){
@@ -28,11 +30,16 @@ public class PaymentsController {
         validateAssessment.setOffice(office);
         validateAssessment.setYear(year);
 
+        log.info("The validateAssessment request payload :" ,validateAssessment);
+
         return assessment.checkIfAssessmentExists(validateAssessment);
     }
 
     @PostMapping("/paymentAdvice")
-    public ProcessPaymentResponse process ( @RequestBody ProcessPayment processPayment){
+    public Payment process (@RequestBody ProcessPayment processPayment){
+
+        log.info("The paymentAdvice request payload :" ,processPayment);
+
         return processor.paymentProcessFlow(processPayment);
     }
 
