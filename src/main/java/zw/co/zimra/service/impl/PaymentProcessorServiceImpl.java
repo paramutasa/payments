@@ -24,27 +24,34 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
     public Payment paymentProcessFlow(ProcessPayment processPayment) {
 
         Payment ppr = new Payment();
-        ppr.setSerialNumber(processPayment.getSerialNumber());
-        ppr.setReferenceNumber(processPayment.getReferenceNumber());
-        ppr.setBPNumber(processPayment.getBPNumber());
-        ppr.setAccountNumber(processPayment.getAccountNumber());
-        ppr.setRRN(processPayment.getRRN());
-        ppr.setUserID(processPayment.getUserID());
-        ppr.setTaxCode(processPayment.getTaxCode());
-        ppr.setRegion(processPayment.getRegion());
-        ppr.setPaymentDate(processPayment.getPaymentDate());
-        ppr.setCaptureTime(processPayment.getCaptureTime());
-        ppr.setCurrency(processPayment.getCurrency());
-        ppr.setAmount(processPayment.getAmount());
-        ppr.setClientName(processPayment.getClientName());
+        if (paymentRepository.findBySerialNumberIgnoreCase(processPayment.getSerialNumber()) == null) {
+            ppr.setSerialNumber(processPayment.getSerialNumber());
+            ppr.setReferenceNumber(processPayment.getReferenceNumber());
+            ppr.setBPNumber(processPayment.getBPNumber());
+            ppr.setAccountNumber(processPayment.getAccountNumber());
+            ppr.setRRN(processPayment.getRRN());
+            ppr.setUserID(processPayment.getUserID());
+            ppr.setTaxCode(processPayment.getTaxCode());
+            ppr.setRegion(processPayment.getRegion());
+            ppr.setPaymentDate(processPayment.getPaymentDate());
+            ppr.setCaptureTime(processPayment.getCaptureTime());
+            ppr.setCurrency(processPayment.getCurrency());
+            ppr.setAmount(processPayment.getAmount());
+            ppr.setClientName(processPayment.getClientName());
 //generated responses
-        ppr.setReceiptNumber(givenUsingJava8_whenGeneratingRandomAlphanumericString_thenCorrect());
-        ppr.setReceiptDate(dateFormated());
-        ppr.setReceiptTime(timeFormated());
-        ppr.setMessage("SUCCESS");
+            ppr.setReceiptNumber(givenUsingJava8_whenGeneratingRandomAlphanumericString_thenCorrect());
+            ppr.setReceiptDate(dateFormated());
+            ppr.setReceiptTime(timeFormated());
+            ppr.setMessage("SUCCESS");
 
-        paymentRepository.save(ppr);
-        log.info("Successfully processed the payment");
+            paymentRepository.save(ppr);
+            log.info("Successfully processed the payment");
+        } else {
+            log.info("The payment with Serial number : " + processPayment.getSerialNumber() + " exists");
+            ppr=paymentRepository.findBySerialNumberIgnoreCase(processPayment.getSerialNumber());
+            ppr.setMessage("PAYMENT EXISTS");
+
+        }
         return ppr;
 
     }
@@ -61,7 +68,6 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
 
-        System.out.println(generatedString);
         return generatedString;
     }
 
@@ -70,7 +76,6 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
         String pattern = "MMddyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
-        System.out.println(date);
         return date;
     }
 
@@ -78,7 +83,6 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
         String pattern = "HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
-        System.out.println(date);
         return date;
     }
 }

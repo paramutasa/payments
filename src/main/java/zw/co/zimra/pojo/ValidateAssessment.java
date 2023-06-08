@@ -21,4 +21,12 @@ public class ValidateAssessment {
     private String assNo;
     private String office;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "year='" + year + '\'' +
+                ", assNo='" + assNo + '\'' +
+                ", office='" + office + '\'' +
+                '}';
+    }
 }

@@ -25,7 +25,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         ValidateAssessmentResponse var = new ValidateAssessmentResponse();
 
 
-        Assessment assessment = assessmentRepository.findByAssNo(validateAssessment.getAssNo());
+        Assessment assessment = assessmentRepository.findByAssNoIgnoreCase(validateAssessment.getAssNo());
 
         if (assessment != null
                 && validateAssessment.getAssNo().equalsIgnoreCase(assessment.getAssNo())

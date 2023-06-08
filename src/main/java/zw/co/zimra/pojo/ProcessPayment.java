@@ -31,4 +31,22 @@ public class ProcessPayment {
     private String rRN;
     private String userID;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", referenceNumber='" + referenceNumber + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", bPNumber='" + bPNumber + '\'' +
+                ", clientName='" + clientName + '\'' +
+                ", taxCode='" + taxCode + '\'' +
+                ", region='" + region + '\'' +
+                ", paymentDate='" + paymentDate + '\'' +
+                ", captureTime='" + captureTime + '\'' +
+                ", currency='" + currency + '\'' +
+                ", amount='" + amount + '\'' +
+                ", rRN='" + rRN + '\'' +
+                ", userID='" + userID + '\'' +
+                '}';
+    }
 }

@@ -30,7 +30,7 @@ public class PaymentsController {
         validateAssessment.setOffice(office);
         validateAssessment.setYear(year);
 
-        log.info("The validateAssessment request payload :" ,validateAssessment);
+        log.info("The validateAssessment request payload : " +validateAssessment);
 
         return assessment.checkIfAssessmentExists(validateAssessment);
     }
@@ -38,7 +38,7 @@ public class PaymentsController {
     @PostMapping("/paymentAdvice")
     public Payment process (@RequestBody ProcessPayment processPayment){
 
-        log.info("The paymentAdvice request payload :" ,processPayment);
+        log.info("The paymentAdvice request payload : " +processPayment);
 
         return processor.paymentProcessFlow(processPayment);
     }
