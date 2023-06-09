@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zw.co.zimra.model.Payment;
 import zw.co.zimra.pojo.ProcessPayment;
-import zw.co.zimra.pojo.ProcessPaymentResponse;
 import zw.co.zimra.repository.PaymentRepository;
 import zw.co.zimra.service.PaymentProcessorService;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 

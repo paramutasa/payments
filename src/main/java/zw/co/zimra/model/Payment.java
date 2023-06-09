@@ -5,14 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "payment", schema = "PAYMENTS")
+//@Table(name = "payment", schema = "PAYMENTS")
+@Table(name = "payment")
 public class Payment {
     @Id
     private String serialNumber;
