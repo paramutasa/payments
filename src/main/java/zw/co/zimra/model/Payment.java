@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Getter
@@ -14,12 +15,16 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@IdClass(PaymentId.class)
 //@Table(name = "payment", schema = "PAYMENTS")
 @Table(name = "payment")
 public class Payment {
     @Id
     private String serialNumber;
+    @Id
     private String referenceNumber;
+    @Id
+    private String rRN;
     private String bPNumber;
     private String clientName;
     private String accountNumber;
@@ -33,6 +38,5 @@ public class Payment {
     private String receiptDate;
     private String receiptTime;
     private String message;
-    private String rRN;
     private String userID;
 }

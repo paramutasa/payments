@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zw.co.zimra.model.Payment;
+import zw.co.zimra.model.PaymentId;
 import zw.co.zimra.pojo.ProcessPayment;
 import zw.co.zimra.repository.PaymentRepository;
 import zw.co.zimra.service.PaymentProcessorService;
@@ -22,7 +23,7 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
     public Payment paymentProcessFlow(ProcessPayment processPayment) {
 
         Payment ppr = new Payment();
-        if (paymentRepository.findBySerialNumberIgnoreCase(processPayment.getSerialNumber()) == null) {
+        if (paymentRepository.findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCase(processPayment.getSerialNumber(), processPayment.getReferenceNumber(), processPayment.getRRN()) == null) {
             ppr.setSerialNumber(processPayment.getSerialNumber());
             ppr.setReferenceNumber(processPayment.getReferenceNumber());
             ppr.setBPNumber(processPayment.getBPNumber());
@@ -45,8 +46,8 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
             paymentRepository.save(ppr);
             log.info("Successfully processed the payment");
         } else {
-            log.info("The payment with Serial number : " + processPayment.getSerialNumber() + " exists");
-            ppr=paymentRepository.findBySerialNumberIgnoreCase(processPayment.getSerialNumber());
+            log.info("The payment with Serial number : " + processPayment.getSerialNumber()+" ,Reference Number : "+processPayment.getReferenceNumber()+" ,RRN : "+processPayment.getRRN() + " exists");
+            ppr=paymentRepository.findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCase(processPayment.getSerialNumber(), processPayment.getReferenceNumber(), processPayment.getRRN());
             ppr.setMessage("PAYMENT EXISTS");
 
         }

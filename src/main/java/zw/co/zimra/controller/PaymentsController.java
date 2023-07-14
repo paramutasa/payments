@@ -40,6 +40,10 @@ public class PaymentsController {
 
         log.info("The paymentAdvice request payload : " +processPayment);
 
+        processPayment.setRRN(processPayment.getRRN().substring(1));
+
+//        System.out.println(">>>>>>>>>>++++>>>>>>substring :"+processPayment.getRRN());
+
         return processor.paymentProcessFlow(processPayment);
     }
 
