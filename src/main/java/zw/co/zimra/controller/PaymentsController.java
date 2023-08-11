@@ -3,13 +3,17 @@ package zw.co.zimra.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import zw.co.zimra.model.Payment;
-import zw.co.zimra.pojo.ProcessPayment;
-import zw.co.zimra.pojo.ValidateAssessment;
-import zw.co.zimra.pojo.ValidateAssessmentResponse;
+import zw.co.zimra.pojo.*;
 import zw.co.zimra.service.AssessmentService;
 import zw.co.zimra.service.PaymentProcessorService;
+import zw.co.zimra.service.PaymentToSwtpService;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,13 +26,19 @@ public class PaymentsController {
     @Autowired
     PaymentProcessorService processor;
 
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    PaymentToSwtpService paymentToSwtpService;
+
     @GetMapping("/validateAssessment")
     public ValidateAssessmentResponse validate (@RequestParam String assNo,@RequestParam String office,@RequestParam String year){
 
         ValidateAssessment validateAssessment = new ValidateAssessment();
         validateAssessment.setAssNo(assNo);
         validateAssessment.setOffice(office);
-        validateAssessment.setYear(year);
+        validateAssessment.setYear(Long.valueOf(year));
 
         log.info("The validateAssessment request payload : " +validateAssessment);
 
@@ -46,5 +56,11 @@ public class PaymentsController {
 
         return processor.paymentProcessFlow(processPayment);
     }
+    @PostMapping("/paymentToSwtp")
+    public PaymentToSwtpResponse paymentToSwtp (@RequestBody PaymentToSwtpRequest paymentToSwtpRequest){
 
+        log.info("The paymentAdvice request payload : " + paymentToSwtpRequest);
+
+        return paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
+    }
 }

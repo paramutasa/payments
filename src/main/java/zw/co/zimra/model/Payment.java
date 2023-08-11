@@ -16,8 +16,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @IdClass(PaymentId.class)
-//@Table(name = "payment", schema = "PAYMENTS")
-@Table(name = "payment")
+@Table(name = "ZWSTP_PAYMENT_NOTIFICATION")
 public class Payment {
     @Id
     private String serialNumber;
@@ -31,7 +30,7 @@ public class Payment {
     private String taxCode;
     private String region;
     private String currency;
-    private String amount;
+    private Double amount;
     private String paymentDate;
     private String captureTime;
     private String receiptNumber;
@@ -39,4 +38,5 @@ public class Payment {
     private String receiptTime;
     private String message;
     private String userID;
+    private String assNo;
 }

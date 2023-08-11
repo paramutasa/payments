@@ -17,7 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ValidateAssessment {
 
-    private String year;
+    private Long year;
     private String assNo;
     private String office;
 

@@ -17,10 +17,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ValidateAssessmentResponse {
 
-    private String year;
+    private Long year;
     private String assNo;
     private String office;
-    private String amount;
+    private Double amount;
     private String currency;
     private String found;
 

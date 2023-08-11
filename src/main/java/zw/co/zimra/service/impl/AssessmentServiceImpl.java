@@ -26,10 +26,10 @@ public class AssessmentServiceImpl implements AssessmentService {
 
 
         Assessment assessment = assessmentRepository.findByAssNoIgnoreCase(validateAssessment.getAssNo());
-
+        System.out.println(assessment);
         if (assessment != null
                 && validateAssessment.getAssNo().equalsIgnoreCase(assessment.getAssNo())
-                && validateAssessment.getYear().equalsIgnoreCase(assessment.getYear())
+                && 0 == validateAssessment.getYear().compareTo(assessment.getYear())// shows the years are equal
                 && validateAssessment.getOffice().equalsIgnoreCase(assessment.getOffice())
         ) {
             var.setYear(assessment.getYear());
@@ -41,12 +41,12 @@ public class AssessmentServiceImpl implements AssessmentService {
 
             log.info("Assessment found");
         } else {
-            var.setYear("");
+            var.setYear(0L);
             var.setAssNo("");
             var.setOffice("");
             var.setFound("NOT PRESENT");
             var.setCurrency("");
-            var.setAmount("");
+            var.setAmount(0D);
 
             log.info("Assessment not found");
         }
