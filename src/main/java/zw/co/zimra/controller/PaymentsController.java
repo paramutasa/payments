@@ -3,7 +3,6 @@ package zw.co.zimra.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import zw.co.zimra.model.Payment;
@@ -11,9 +10,6 @@ import zw.co.zimra.pojo.*;
 import zw.co.zimra.service.AssessmentService;
 import zw.co.zimra.service.PaymentProcessorService;
 import zw.co.zimra.service.PaymentToSwtpService;
-
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,12 +51,5 @@ public class PaymentsController {
 //        System.out.println(">>>>>>>>>>++++>>>>>>substring :"+processPayment.getRRN());
 
         return processor.paymentProcessFlow(processPayment);
-    }
-    @PostMapping("/paymentToSwtp")
-    public PaymentToSwtpResponse paymentToSwtp (@RequestBody PaymentToSwtpRequest paymentToSwtpRequest){
-
-        log.info("The paymentAdvice request payload : " + paymentToSwtpRequest);
-
-        return paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
     }
 }

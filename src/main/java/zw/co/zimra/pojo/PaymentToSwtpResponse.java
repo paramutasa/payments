@@ -1,13 +1,12 @@
 package zw.co.zimra.pojo;
 
 
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *

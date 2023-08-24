@@ -32,21 +32,21 @@ public class AssessmentServiceImpl implements AssessmentService {
                 && 0 == validateAssessment.getYear().compareTo(assessment.getYear())// shows the years are equal
                 && validateAssessment.getOffice().equalsIgnoreCase(assessment.getOffice())
         ) {
-            var.setYear(assessment.getYear());
+            var.setYear(assessment.getYear().toString());
             var.setAssNo(assessment.getAssNo());
             var.setOffice(assessment.getOffice());
             var.setFound("IS PRESENT");
             var.setCurrency(assessment.getCurrency());
-            var.setAmount(assessment.getAmount());
+            var.setAmount(assessment.getAmount().toString());
 
             log.info("Assessment found");
         } else {
-            var.setYear(0L);
+            var.setYear("");
             var.setAssNo("");
             var.setOffice("");
             var.setFound("NOT PRESENT");
             var.setCurrency("");
-            var.setAmount(0D);
+            var.setAmount("");
 
             log.info("Assessment not found");
         }
