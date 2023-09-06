@@ -84,26 +84,124 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
 
 
             //get the response from ZwSTP endpoint here
-            PaymentToSwtpResponse paymentToSwtpResponse= paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
+            PaymentToSwtpResponse paymentToSwtpResponse = paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
 
             if(paymentToSwtpResponse == null){
+                //this can happen if the Swtp did not return anything
                 ppr.setMessage("NOT COMPLETE");
                 paymentRepository.save(ppr);
                 log.info("Partially processed the payment");
-            }else {
-                ppr.setReceiptNumber(receiptNumberProcessed(paymentToSwtpResponse));
-                ppr.setReceiptDate(dateFormatedEdit(paymentToSwtpResponse.getDateTime()));
-                ppr.setReceiptTime(timeFormatedEdit(paymentToSwtpResponse.getDateTime()));
+
+            }else if (paymentToSwtpResponse.getErrorCode().equalsIgnoreCase("E0001")){
+                //Payment receipted successfully
+
+                ppr.setReceiptNumber(receiptNumberProcessed(paymentToSwtpResponse.getSerialReference()));
+                ppr.setReceiptDate(dateFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                ppr.setReceiptTime(timeFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
                 ppr.setMessage("SUCCESS");
 
                 paymentRepository.save(ppr);
                 log.info("Successfully processed the payment");
+
+            } else if (paymentToSwtpResponse.getErrorCode().equalsIgnoreCase("E0002")) {
+                //Assessment was not found
+
+                ppr.setMessage("ASSESSMENT NOT FOUND");
+                log.info(paymentToSwtpResponse.getMessageCode());
+
+            } else if (paymentToSwtpResponse.getErrorCode().equalsIgnoreCase("E0003")) {
+                //Payment has already been made
+
+                ppr.setReceiptNumber(receiptNumberProcessed(paymentToSwtpResponse.getSerialReference()));
+                ppr.setReceiptDate(dateFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                ppr.setReceiptTime(timeFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                paymentRepository.save(ppr);
+                ppr.setMessage("PAYMENT EXISTS");
+                log.info(paymentToSwtpResponse.getMessageCode());
+
             }
 
 
-        } else {
+        }else if (paymentRepository.findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCaseAndReceiptNumberIsNullAndReceiptDateIsNullAndReceiptTimeIsNull(processPayment.getSerialNumber(), processPayment.getReferenceNumber(), processPayment.getRRN()) != null){
+            //payment notification table has receipt_number, receipt_date, receipt_time fields as null
+
+            Assessment assessment = assessmentRepository.findByAssNoIgnoreCase(processPayment.getBPNumber());
+
+            PaymentToSwtpRequest paymentToSwtpRequest= new PaymentToSwtpRequest();
+            paymentToSwtpRequest.setPaymentOrderId(assessment.getPaymentDocumentId());
+            paymentToSwtpRequest.setBankCashierId(ppr.getUserID());
+
+            PaymentAmountDetail paymentAmountDetail = new PaymentAmountDetail();
+            paymentAmountDetail.setCollectionCurrencyCode(ppr.getCurrency());
+            paymentAmountDetail.setCollectionCurrencyAmount(ppr.getAmount());
+            paymentAmountDetail.setExchangeRate(1D);
+            paymentAmountDetail.setTotalAssessedCurrencyCode(assessment.getCurrency());
+            paymentAmountDetail.setTotalAssessedCurrencyAmount(assessment.getAmount());
+
+            paymentToSwtpRequest.setPaymentAmountDetail(paymentAmountDetail);
+
+            ArrayList<MeansOfPayment> meansOfPaymentList = new ArrayList<>();
+            MeansOfPayment meansOfPayment = new MeansOfPayment();
+
+            meansOfPayment.setCode("08");
+            meansOfPayment.setName("ZETSS");
+            meansOfPayment.setReference(ppr.getReferenceNumber());
+            meansOfPayment.setBank(ppr.getRRN().substring(11));
+            meansOfPayment.setPaidAmount(assessment.getAmount());
+            meansOfPayment.setCollectedCurrency(ppr.getCurrency());
+            meansOfPayment.setCollectedAmount(ppr.getAmount());
+
+            meansOfPaymentList.add(meansOfPayment);
+
+            paymentToSwtpRequest.setMeansOfPayments(meansOfPaymentList);
+
+
+            //get the response from ZwSTP endpoint here
+            PaymentToSwtpResponse paymentToSwtpResponse = paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
+
+            if(paymentToSwtpResponse == null){
+                //this can happen if the Swtp did not return anything
+                ppr.setMessage("NOT COMPLETE");
+                paymentRepository.save(ppr);
+                log.info("Partially processed the payment");
+
+            }else if (paymentToSwtpResponse.getErrorCode().equalsIgnoreCase("E0001")){
+                //Payment receipted successfully
+
+                ppr.setReceiptNumber(receiptNumberProcessed(paymentToSwtpResponse.getSerialReference()));
+                ppr.setReceiptDate(dateFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                ppr.setReceiptTime(timeFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                ppr.setMessage("SUCCESS");
+
+                paymentRepository.save(ppr);
+                log.info("Successfully processed the payment");
+
+            } else if (paymentToSwtpResponse.getErrorCode().equalsIgnoreCase("E0002")) {
+                //Assessment was not found
+
+                ppr.setMessage("ASSESSMENT NOT FOUND");
+                log.info(paymentToSwtpResponse.getMessageCode());
+
+            } else if (paymentToSwtpResponse.getErrorCode().equalsIgnoreCase("E0003")) {
+                //Payment has already been made
+
+                ppr.setReceiptNumber(receiptNumberProcessed(paymentToSwtpResponse.getSerialReference()));
+                ppr.setReceiptDate(dateFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                ppr.setReceiptTime(timeFormatedEdit(paymentToSwtpResponse.getSerialReference().getDateTime()));
+                paymentRepository.save(ppr);
+                ppr.setMessage("PAYMENT EXISTS");
+                log.info(paymentToSwtpResponse.getMessageCode());
+
+            }
+
+            //the fields have to be updated
+
+        }
+
+        else if (paymentRepository.findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCaseAndReceiptNumberIsNotNullAndReceiptDateIsNotNullAndReceiptTimeIsNotNull(processPayment.getSerialNumber(), processPayment.getReferenceNumber(), processPayment.getRRN()) != null){
+           //payment exists and every field in the payment notification table is populated
             log.info("The payment with Serial number : " + processPayment.getSerialNumber()+" ,Reference Number : "+processPayment.getReferenceNumber()+" ,RRN : "+processPayment.getRRN() + " exists");
-            ppr=paymentRepository.findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCase(processPayment.getSerialNumber(), processPayment.getReferenceNumber(), processPayment.getRRN());
+            ppr=paymentRepository.findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCaseAndReceiptNumberIsNotNullAndReceiptDateIsNotNullAndReceiptTimeIsNotNull(processPayment.getSerialNumber(), processPayment.getReferenceNumber(), processPayment.getRRN());
             ppr.setMessage("PAYMENT EXISTS");
 
         }
@@ -111,11 +209,11 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
 
     }
 
-    public String receiptNumberProcessed(PaymentToSwtpResponse paymentToSwtpResponse){
-        String receiptNumberAsText = paymentToSwtpResponse.getYear()+"-"+
-                paymentToSwtpResponse.getOffice()+"-"+
-                paymentToSwtpResponse.getSerialLetter()+"-"+
-                paymentToSwtpResponse.getNumber();
+    public String receiptNumberProcessed(SerialReference serialReference){
+        String receiptNumberAsText = serialReference.getYear()+"-"+
+                serialReference.getOffice()+"-"+
+                serialReference.getSerialLetter()+"-"+
+                serialReference.getNumber();
         return receiptNumberAsText;
     }
 

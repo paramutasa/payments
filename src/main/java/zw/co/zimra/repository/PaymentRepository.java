@@ -6,4 +6,6 @@ import zw.co.zimra.model.Payment;
 public interface PaymentRepository extends JpaRepository<Payment, String> {
 
     Payment findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCase(String serialNumber, String referenceNumber, String rRN);
+    Payment findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCaseAndReceiptNumberIsNotNullAndReceiptDateIsNotNullAndReceiptTimeIsNotNull(String serialNumber, String referenceNumber, String rRN);
+    Payment findBySerialNumberIgnoreCaseAndReferenceNumberIgnoreCaseAndRRNIgnoreCaseAndReceiptNumberIsNullAndReceiptDateIsNullAndReceiptTimeIsNull(String serialNumber, String referenceNumber, String rRN);
 }
