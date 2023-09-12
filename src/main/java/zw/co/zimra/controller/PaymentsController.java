@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import zw.co.zimra.model.Payment;
-import zw.co.zimra.pojo.*;
+import zw.co.zimra.pojo.ProcessPayment;
+import zw.co.zimra.pojo.ValidateAssessment;
+import zw.co.zimra.pojo.ValidateAssessmentResponse;
 import zw.co.zimra.service.AssessmentService;
 import zw.co.zimra.service.PaymentProcessorService;
 import zw.co.zimra.service.PaymentToSwtpService;
@@ -47,8 +49,6 @@ public class PaymentsController {
         log.info("The paymentAdvice request payload : " +processPayment);
 
         processPayment.setRRN(processPayment.getRRN().substring(1));
-
-//        System.out.println(">>>>>>>>>>++++>>>>>>substring :"+processPayment.getRRN());
 
         return processor.paymentProcessFlow(processPayment);
     }

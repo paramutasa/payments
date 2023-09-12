@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import zw.co.zimra.pojo.PaymentToSwtpRequest;
 import zw.co.zimra.pojo.PaymentToSwtpResponse;
-import zw.co.zimra.pojo.SerialReference;
 import zw.co.zimra.service.PaymentToSwtpService;
 
 import java.util.Arrays;
@@ -35,6 +34,10 @@ public class PaymentToSwtpImpl implements PaymentToSwtpService {
 
         ResponseEntity<PaymentToSwtpResponse> response = restTemplate.exchange(url, HttpMethod.POST,entity, PaymentToSwtpResponse.class);
 
+//        log.info(String.format("%s-%s-%s",
+//                response.getBody().getSerialReference().getOffice(),
+//                response.getBody().getSerialReference().getSerial(),
+//                response.getBody().getSerialReference().getNode() ));
         System.out.println(response);
         return response;
     }

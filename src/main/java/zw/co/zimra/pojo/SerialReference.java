@@ -26,7 +26,7 @@ public class SerialReference {
     public Long node;
     public Long number;
     public String office;
-    public String serialLetter;
+    public String serial;
     public Long year;
 
     @Override
@@ -37,7 +37,7 @@ public class SerialReference {
                 ", node=" + node +
                 ", number=" + number +
                 ", office='" + office + '\'' +
-                ", serialLetter='" + serialLetter + '\'' +
+                ", serialLetter='" + serial + '\'' +
                 ", year=" + year +
                 '}';
     }
