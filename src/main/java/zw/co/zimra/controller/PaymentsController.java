@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import zw.co.zimra.model.Payment;
 import zw.co.zimra.pojo.ProcessPayment;
+import zw.co.zimra.pojo.ProcessPaymentResponse;
 import zw.co.zimra.pojo.ValidateAssessment;
 import zw.co.zimra.pojo.ValidateAssessmentResponse;
 import zw.co.zimra.service.AssessmentService;
@@ -44,7 +45,7 @@ public class PaymentsController {
     }
 
     @PostMapping("/paymentAdvice")
-    public Payment process (@RequestBody ProcessPayment processPayment){
+    public ProcessPaymentResponse process (@RequestBody ProcessPayment processPayment){
 
         log.info("The paymentAdvice request payload : " +processPayment);
 

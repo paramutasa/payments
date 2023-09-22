@@ -28,7 +28,7 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
 
 
     @Override
-    public Payment paymentProcessFlow(ProcessPayment processPayment) {
+    public ProcessPaymentResponse paymentProcessFlow(ProcessPayment processPayment) {
 
         Payment ppr = new Payment();
         ppr.setSerialNumber(processPayment.getSerialNumber());
@@ -221,7 +221,42 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
             ppr.setMessage("PAYMENT EXISTS");
 
         }
-        return ppr;
+        ProcessPaymentResponse response = new ProcessPaymentResponse();
+
+        response.setSerialNumber(ppr.getSerialNumber());
+        response.setReferenceNumber(ppr.getReferenceNumber());
+        response.setRRN(ppr.getRRN());
+        response.setBPNumber(ppr.getBPNumber());
+        response.setClientName(ppr.getClientName());
+        response.setAccountNumber(ppr.getAccountNumber());
+        response.setTaxCode(ppr.getTaxCode());
+        response.setRegion(ppr.getRegion());
+        response.setCurrency(ppr.getCurrency());
+        response.setAmount(ppr.getAmount().toString());
+        response.setPaymentDate(ppr.getPaymentDate());
+        response.setCaptureTime(ppr.getCaptureTime());
+        response.setReceiptNumber(ppr.getReceiptNumber());
+        response.setReceiptDate(ppr.getReceiptDate());
+        response.setReceiptTime(ppr.getReceiptTime());
+        response.setMessage(ppr.getMessage());
+        response.setUserID(ppr.getUserID());
+
+//        response.setCustomsReceiptNumber("");
+//        response.setCustomsReceiptDate("");
+//        response.setType("");
+//        response.setID("");
+//        response.setNumber("");
+//        response.setLogNumber("");
+//        response.setLogNumber("");
+//        response.setMessageV1("");
+//        response.setMessageV2("");
+//        response.setMessageV3("");
+//        response.setMessageV4("");
+//        response.setCustomsMessage("");
+
+
+        log.info(response.toString());
+        return response;
 
     }
 
