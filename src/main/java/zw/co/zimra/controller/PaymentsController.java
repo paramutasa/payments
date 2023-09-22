@@ -34,7 +34,7 @@ public class PaymentsController {
     public ValidateAssessmentResponse validate (@RequestParam String assNo,@RequestParam String office,@RequestParam String year){
 
         ValidateAssessment validateAssessment = new ValidateAssessment();
-        validateAssessment.setAssNo(assNo);
+        validateAssessment.setAssNo(assNo+"_"+year);
         validateAssessment.setOffice(office);
         validateAssessment.setYear(Long.valueOf(year));
 
