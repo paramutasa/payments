@@ -73,10 +73,10 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
             ArrayList<MeansOfPayment> meansOfPaymentList = new ArrayList<>();
             MeansOfPayment meansOfPayment = new MeansOfPayment();
 
-            meansOfPayment.setCode("08");
-            meansOfPayment.setName("ZETSS");
+            meansOfPayment.setCode("27");
+            meansOfPayment.setName("ONLINE");
             meansOfPayment.setReference(ppr.getReferenceNumber());
-            meansOfPayment.setBank(ppr.getRRN().substring(11));
+            meansOfPayment.setBank(setBankName(processPayment.getRRN()));
             meansOfPayment.setPaidAmount(assessment.getAmount());
             meansOfPayment.setCollectedCurrency(ppr.getCurrency());
             meansOfPayment.setCollectedAmount(ppr.getAmount());
@@ -154,10 +154,10 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
             ArrayList<MeansOfPayment> meansOfPaymentList = new ArrayList<>();
             MeansOfPayment meansOfPayment = new MeansOfPayment();
 
-            meansOfPayment.setCode("08");
-            meansOfPayment.setName("ZETSS");
+            meansOfPayment.setCode("27");
+            meansOfPayment.setName("ONLINE");
             meansOfPayment.setReference(ppr.getReferenceNumber());
-            meansOfPayment.setBank(processPayment.getRRN().substring(11));
+            meansOfPayment.setBank(setBankName(processPayment.getRRN()));
             meansOfPayment.setPaidAmount(assessment.getAmount());
             meansOfPayment.setCollectedCurrency(ppr.getCurrency());
             meansOfPayment.setCollectedAmount(ppr.getAmount());
@@ -165,7 +165,6 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
             meansOfPaymentList.add(meansOfPayment);
 
             paymentToSwtpRequest.setMeansOfPayments(meansOfPaymentList);
-
 
             //get the response from ZwSTP endpoint here
             PaymentToSwtpResponse paymentToSwtpResponse = paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
@@ -281,5 +280,10 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         return simpleDateFormat.format(dateFromResponse);
+    }
+    public String setBankName(String rrn){
+        int index = rrn.indexOf('_');
+        rrn = rrn.substring(index + 1);
+        return rrn;
     }
 }

@@ -51,6 +51,19 @@ public class PaymentsController {
 
         processPayment.setRRN(processPayment.getRRN().substring(1));
 
-        return processor.paymentProcessFlow(processPayment);
+        if (checkRrn(processPayment.getRRN()).length()!=9){
+            ProcessPaymentResponse response = new ProcessPaymentResponse();
+            response.setMessage("put correct rrn format");
+            log.info("the rrn is in wrong format : " + processPayment.getRRN());
+        return response;
+        }
+        else {
+            return processor.paymentProcessFlow(processPayment);
+        }
+    }
+    public String checkRrn(String rrn){
+        int index = rrn.indexOf('_');
+        rrn = rrn.substring(0,index);
+        return rrn;
     }
 }
