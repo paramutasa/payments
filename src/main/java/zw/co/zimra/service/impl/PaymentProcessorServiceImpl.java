@@ -286,4 +286,12 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
         rrn = rrn.substring(index + 1);
         return rrn;
     }
+   // public String checkBPnumber(String bpnumber) {
+    //    if (bpnumber != bpnumber){
+     //       return "BP Number does not exist";
+        //}else{
+          //  return bpnumber;
+      //  }
+
+   // }
 }
