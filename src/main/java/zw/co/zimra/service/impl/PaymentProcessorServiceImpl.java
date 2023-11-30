@@ -224,8 +224,8 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
 
         response.setSerialNumber(ppr.getSerialNumber());
         response.setReferenceNumber(ppr.getReferenceNumber());
-        response.setRRN(ppr.getRRN());
-        response.setBPNumber(ppr.getBPNumber());
+        response.setRrn(ppr.getRRN());
+        response.setBpnumber(ppr.getBPNumber());
         response.setClientName(ppr.getClientName());
         response.setAccountNumber(ppr.getAccountNumber());
         response.setTaxCode(ppr.getTaxCode());

@@ -46,8 +46,8 @@ public class ProcessPaymentResponse {
 //    private String customsMessage;
     private String userID;
 //    private String iD;
-    private String bPNumber;
-    private String rRN;
+    private String bpnumber;
+    private String rrn;
 
     @Override
     public String toString() {
@@ -79,8 +79,8 @@ public class ProcessPaymentResponse {
 //                ", customsMessage='" + customsMessage + '\'' +
                 ", userID='" + userID + '\'' +
 //                ", iD='" + iD + '\'' +
-                ", bPNumber='" + bPNumber + '\'' +
-                ", rRN='" + rRN + '\'' +
+                ", bpnumber='" + bpnumber + '\'' +
+                ", rrn='" + rrn + '\'' +
                 '}';
     }
 }
