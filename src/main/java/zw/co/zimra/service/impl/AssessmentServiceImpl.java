@@ -29,8 +29,8 @@ public class AssessmentServiceImpl implements AssessmentService {
         System.out.println(assessment);
         if (assessment != null
                 && validateAssessment.getAssNo().equalsIgnoreCase(assessment.getAssNo())
-                && 0 == validateAssessment.getYear().compareTo(assessment.getYear())// shows the years are equal
-                && validateAssessment.getOffice().equalsIgnoreCase(assessment.getOffice())
+//                && 0 == validateAssessment.getYear().compareTo(assessment.getYear())// shows the years are equal
+//                && validateAssessment.getOffice().equalsIgnoreCase(assessment.getOffice())
         ) {
             var.setYear(assessment.getYear().toString());
             var.setAssNo(assessment.getAssNo());
