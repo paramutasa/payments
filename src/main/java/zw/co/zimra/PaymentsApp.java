@@ -3,12 +3,14 @@ package zw.co.zimra;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
 /**
  *
- * @author munhangaa
+ *
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
 public class PaymentsApp {
     public static void main(String[]args){
         SpringApplication.run(PaymentsApp.class, args);

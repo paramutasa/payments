@@ -138,36 +138,41 @@ public class PaymentProcessorServiceImpl implements PaymentProcessorService {
 
             Assessment assessment = assessmentRepository.findByAssNoIgnoreCase(processPayment.getBPNumber());
 
-            PaymentToSwtpRequest paymentToSwtpRequest = new PaymentToSwtpRequest();
-            paymentToSwtpRequest.setPaymentOrderId(assessment.getPaymentDocumentId());
-            paymentToSwtpRequest.setBankCashierId(ppr.getUserID());
 
-            PaymentAmountDetail paymentAmountDetail = new PaymentAmountDetail();
-            paymentAmountDetail.setCollectionCurrencyCode(ppr.getCurrency());
-            paymentAmountDetail.setCollectionCurrencyAmount(ppr.getAmount());
-            paymentAmountDetail.setExchangeRate(1D);
-            paymentAmountDetail.setTotalAssessedCurrencyCode(assessment.getCurrency());
-            paymentAmountDetail.setTotalAssessedCurrencyAmount(assessment.getAmount());
+                PaymentToSwtpRequest paymentToSwtpRequest = new PaymentToSwtpRequest();
+            if(assessment!=null) {
+                paymentToSwtpRequest.setPaymentOrderId(assessment.getPaymentDocumentId());
+                paymentToSwtpRequest.setBankCashierId(ppr.getUserID());
 
-            paymentToSwtpRequest.setPaymentAmountDetail(paymentAmountDetail);
+                PaymentAmountDetail paymentAmountDetail = new PaymentAmountDetail();
+                paymentAmountDetail.setCollectionCurrencyCode(ppr.getCurrency());
+                paymentAmountDetail.setCollectionCurrencyAmount(ppr.getAmount());
+                paymentAmountDetail.setExchangeRate(1D);
+                paymentAmountDetail.setTotalAssessedCurrencyCode(assessment.getCurrency());
+                paymentAmountDetail.setTotalAssessedCurrencyAmount(assessment.getAmount());
 
-            ArrayList<MeansOfPayment> meansOfPaymentList = new ArrayList<>();
-            MeansOfPayment meansOfPayment = new MeansOfPayment();
+                paymentToSwtpRequest.setPaymentAmountDetail(paymentAmountDetail);
 
-            meansOfPayment.setCode("27");
-            meansOfPayment.setName("ONLINE");
-            meansOfPayment.setReference(ppr.getReferenceNumber());
-            meansOfPayment.setBank(setBankName(processPayment.getRRN()));
-            meansOfPayment.setPaidAmount(assessment.getAmount());
-            meansOfPayment.setCollectedCurrency(ppr.getCurrency());
-            meansOfPayment.setCollectedAmount(ppr.getAmount());
+                ArrayList<MeansOfPayment> meansOfPaymentList = new ArrayList<>();
+                MeansOfPayment meansOfPayment = new MeansOfPayment();
 
-            meansOfPaymentList.add(meansOfPayment);
+                meansOfPayment.setCode("27");
+                meansOfPayment.setName("ONLINE");
+                meansOfPayment.setReference(ppr.getReferenceNumber());
+                meansOfPayment.setBank(setBankName(processPayment.getRRN()));
+                meansOfPayment.setPaidAmount(assessment.getAmount());
+                meansOfPayment.setCollectedCurrency(ppr.getCurrency());
+                meansOfPayment.setCollectedAmount(ppr.getAmount());
 
-            paymentToSwtpRequest.setMeansOfPayments(meansOfPaymentList);
+                meansOfPaymentList.add(meansOfPayment);
 
-            //get the response from ZwSTP endpoint here
-            PaymentToSwtpResponse paymentToSwtpResponse = paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
+                paymentToSwtpRequest.setMeansOfPayments(meansOfPaymentList);
+
+            }
+
+                //get the response from ZwSTP endpoint here
+                PaymentToSwtpResponse paymentToSwtpResponse = paymentToSwtpService.sendToSwtp(paymentToSwtpRequest).getBody();
+
 
             if (paymentToSwtpResponse == null) {
                 //this can happen if the Swtp did not return anything
